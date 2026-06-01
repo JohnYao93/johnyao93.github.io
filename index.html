@@ -3,44 +3,81 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Personal website for John Yao.">
-  <title>John Yao</title>
-  <link rel="stylesheet" href="./static/css/index.css">
+  <meta name="description" content="Personal website for John Hua Yao.">
+  <title>John Hua Yao</title>
+  <link rel="stylesheet" href="stylesheet.css">
 </head>
+
 <body>
-  <main>
-    <section class="intro" aria-label="Introduction">
-      <div class="intro-text">
-        <h1>John Yao</h1>
-        <p>
-          I am a researcher and engineer interested in robotics, machine
-          learning, and building useful systems. This site is a small home for
-          my work, projects, and contact information.
-        </p>
-        <p>
-          More details will go here soon.
-        </p>
-        <p class="links">
-          <a href="#">Email</a>
-          <span>/</span>
-          <a href="https://github.com/johnyao93">GitHub</a>
-          <span>/</span>
-          <a href="#">CV</a>
-        </p>
+  <main class="page">
+    <section class="profile">
+      <div class="photo-column">
+        <img class="headshot" src="static/images/headshot.jpeg" alt="John Hua Yao">
       </div>
 
-      <figure class="photo-slot" aria-label="Photo placeholder">
-        <div class="photo-frame">Photo</div>
-      </figure>
+      <div class="bio-column">
+        <h1>John Hua Yao</h1>
+
+        <p class="links">
+          <a href="static/files/john-yao-cv.pdf">CV</a>
+          <span>|</span>
+          <a href="mailto:johnyao@stanford.edu">Email</a>
+          <span>|</span>
+          <a href="https://github.com/johnyao93">Github</a>
+          <span>|</span>
+          <a href="#">Google Scholar</a>
+          <span>|</span>
+          <a href="https://www.linkedin.com/in/john-y-815868132/">LinkedIn</a>
+        </p>
+
+        <p>
+          I am a visiting student researcher at the
+          <a href="https://ai.stanford.edu/">Stanford AI Lab</a>, advised by
+          <a href="https://zipengfu.github.io/">Zipeng Fu</a> and
+          <a href="https://robotics.stanford.edu/~cbfinn/">Chelsea Finn</a>,
+          and in the process of completing my Master's degree in Artificial
+          Intelligence at the
+          <a href="https://www.uva.nl/en">University of Amsterdam</a>.
+          Previously, I completed an integrated Master's degree in
+          Mathematics and Computer Science at
+          <a href="https://www.imperial.ac.uk/">Imperial College London</a>,
+          advised by
+          <a href="https://www.ma.ic.ac.uk/~jswlamb/">Jeroen Lamb</a>.
+        </p>
+        <p>
+          I'm interested in high speed robot learning, dexterous manipulation,
+          and practical solutions to accelerating robot learning research.
+        </p>
+      </div>
     </section>
 
-    <section class="section-block">
-      <h2>About</h2>
-      <p>
-        Write a short biography here: your current role, research interests,
-        background, and the kinds of projects you want visitors to notice.
-      </p>
+    <hr>
+
+    <section class="section">
+      <h2>Publications</h2>
+      <article class="work-item">
+        <a class="work-image" href="https://aloha-lightning.github.io/sub/">
+          <img src="static/images/aloha-lightning-teaser.jpg" alt="ALOHA Lightning teaser">
+        </a>
+        <div class="work-details">
+          <h3>
+            <a href="https://aloha-lightning.github.io/sub/">ALOHA Lightning: Learning Fast and Precise Manipulation</a>
+          </h3>
+          <p class="authors">John Hua Yao, Qi Wu, Yihuai Gao, Chelsea Finn, Zipeng Fu</p>
+          <p class="venue">ICRA 2025</p>
+          <p class="work-links"><a href="https://aloha-lightning.github.io/sub/">webpage</a></p>
+          <p class="description">
+            A full-stack system for learning fast, precise bimanual manipulation
+            from near-human-speed kinesthetic demonstrations.
+          </p>
+        </div>
+      </article>
     </section>
+
+    <footer>
+      Website template adapted from
+      <a href="https://github.com/zipengfu/zipengfu.github.io">Zipeng Fu</a>.
+    </footer>
   </main>
 </body>
 </html>

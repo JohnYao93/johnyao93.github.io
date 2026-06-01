@@ -1,0 +1,155 @@
+body {
+  margin: 0;
+  padding: 0;
+  color: #222;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+a {
+  color: #1772d0;
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  color: #f09228;
+}
+
+p {
+  margin: 0 0 12px;
+}
+
+hr {
+  margin: 28px 0 18px;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.page {
+  width: min(100% - 32px, 900px);
+  margin: 36px auto 28px;
+}
+
+.profile {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.photo-column {
+  padding-top: 10px;
+}
+
+.headshot {
+  display: block;
+  width: 190px;
+  aspect-ratio: 1 / 1.25;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  object-position: left center;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.links {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.links span {
+  margin: 0 5px;
+  color: #777;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.section p:last-child {
+  margin-bottom: 0;
+}
+
+.work-item {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.work-image {
+  display: block;
+}
+
+.work-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+}
+
+.authors,
+.venue,
+.work-links,
+.description {
+  margin-bottom: 4px;
+}
+
+.venue {
+  color: #555;
+}
+
+.muted {
+  color: #777;
+}
+
+footer {
+  margin-top: 30px;
+  color: #777;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 680px) {
+  .page {
+    margin-top: 24px;
+  }
+
+  .profile {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .photo-column {
+    justify-self: center;
+    padding-top: 0;
+  }
+
+  .work-item {
+    grid-template-columns: 1fr;
+  }
+}
