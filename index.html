@@ -3,9 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Personal website for John Hua Yao.">
+  <meta name="description" content="John Hua Yao, also known as John Yao, is a visiting student researcher at the Stanford AI Lab.">
+  <meta name="keywords" content="John Hua Yao, John Yao, Stanford, Stanford AI Lab, robotics, robot learning">
+  <meta name="author" content="John Hua Yao">
   <title>John Hua Yao</title>
   <link rel="stylesheet" href="stylesheet.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "John Hua Yao",
+      "alternateName": "John Yao",
+      "url": "https://johnyao93.github.io/",
+      "email": "johnyao@stanford.edu",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "Stanford AI Lab",
+        "url": "https://ai.stanford.edu/"
+      },
+      "sameAs": [
+        "https://github.com/johnyao93",
+        "https://www.linkedin.com/in/john-y-815868132/"
+      ]
+    }
+  </script>
 </head>
 
 <body>
@@ -13,11 +34,6 @@
     <section class="profile">
       <div class="photo-column">
         <img class="headshot" src="static/images/headshot.jpeg" alt="John Hua Yao">
-      </div>
-
-      <div class="bio-column">
-        <h1>John Hua Yao</h1>
-
         <p class="links">
           <a href="static/files/john-yao-cv.pdf">CV</a>
           <span>|</span>
@@ -29,6 +45,10 @@
           <span>|</span>
           <a href="https://www.linkedin.com/in/john-y-815868132/">LinkedIn</a>
         </p>
+      </div>
+
+      <div class="bio-column">
+        <h1>John Hua Yao</h1>
 
         <p>
           I am a visiting student researcher at the
@@ -56,16 +76,15 @@
     <section class="section">
       <h2>Publications</h2>
       <article class="work-item">
-        <a class="work-image" href="https://aloha-lightning.github.io/sub/">
+        <div class="work-image">
           <img src="static/images/aloha-lightning-teaser.jpg" alt="ALOHA Lightning teaser">
-        </a>
+        </div>
         <div class="work-details">
           <h3>
-            <a href="https://aloha-lightning.github.io/sub/">ALOHA Lightning: Learning Fast and Precise Manipulation</a>
+            ALOHA Lightning: Learning Fast and Precise Manipulation
           </h3>
           <p class="authors">John Hua Yao, Qi Wu, Yihuai Gao, Chelsea Finn, Zipeng Fu</p>
           <p class="venue">ICRA 2025</p>
-          <p class="work-links"><a href="https://aloha-lightning.github.io/sub/">webpage</a></p>
           <p class="description">
             A full-stack system for learning fast, precise bimanual manipulation
             from near-human-speed kinesthetic demonstrations.
