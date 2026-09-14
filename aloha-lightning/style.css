@@ -1,0 +1,86 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #292929;
+  background: #fff;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #1772d0; text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font: inherit; }
+:focus-visible { outline: 3px solid #1772d0; outline-offset: 5px; }
+
+.paper-header {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 28px 24px 36px;
+  text-align: center;
+}
+.home-link { display: inline-block; font-size: 15px; margin-bottom: 28px; }
+h1 {
+  margin: 0 0 25px;
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -1.3px;
+}
+.authors { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 25px; margin: 0; font-size: 20px; line-height: 1.5; }
+.authors span { white-space: nowrap; }
+.affiliation { margin: 12px 0 22px; font-size: 18px; }
+.publication-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 22px; font-size: 18px; }
+.paper-venue { display: flex; flex-basis: 100%; align-items: center; justify-content: center; gap: 22px; }
+.paper-link, .resource-link { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.resource-link[aria-disabled="true"] { cursor: default; text-decoration: none; }
+.coming-soon { color: #6b6b6b; font-size: 0.8em; }
+.venue { padding-left: 22px; border-left: 1px solid #d9d9d9; }
+.hero { width: min(1440px, calc(100% - 48px)); margin: 0 auto; }
+video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #111; }
+.hero video { border-radius: 5px; }
+h2 { margin: 0 0 26px; text-align: center; font-size: 30px; line-height: 1.25; font-weight: 500; letter-spacing: -0.5px; }
+.demonstrations { margin: 56px auto 0; max-width: 1280px; }
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 4px 12.5% 12px;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 100%; min-width: 0; margin: 0; scroll-snap-align: center; scroll-snap-stop: always; }
+.slide video { border-radius: 5px; }
+/* Hide floating badges injected by the Video Speed Controller extension. */
+.carousel .vsc-controller { display: none !important; }
+figcaption { text-align: center; margin-top: 16px; font-size: 19px; }
+.carousel-controls { display: flex; justify-content: center; align-items: center; gap: 22px; margin-top: 12px; }
+[hidden] { display: none !important; }
+.arrow { width: 44px; height: 44px; border: 1px solid #d5d5d5; border-radius: 50%; color: #333; background: #fff; font-size: 24px; cursor: pointer; }
+.arrow:hover { background: #f3f5f7; border-color: #777; }
+.dots { display: flex; gap: 2px; }
+.dots button { border: 0; background: transparent; width: 32px; height: 44px; padding: 0; cursor: pointer; display: grid; place-items: center; }
+.dots button::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #c9c9c9; }
+.dots button[aria-current="true"]::after { background: #1772d0; transform: scale(1.25); }
+.slide-status { text-align: center; color: #6b6b6b; font-size: 13px; margin: 10px 0 0; }
+.abstract { max-width: 900px; margin: 58px auto 88px; padding: 38px 24px 0; border-top: 1px solid #e5e5e5; }
+.abstract p { margin: 0; font-size: 18px; line-height: 1.7; text-align: justify; }
+
+@media (min-width: 1600px) { .hero { width: min(1600px, calc(100% - 96px)); } }
+@media (max-width: 640px) {
+  .paper-header { padding: 20px 20px 28px; }
+  .home-link { margin-bottom: 24px; }
+  h1 { letter-spacing: -0.7px; }
+  .desktop-break { display: none; }
+  .authors { font-size: 17px; gap: 6px 16px; }
+  .affiliation, .publication-links { font-size: 16px; }
+  .hero { width: calc(100% - 24px); }
+  .demonstrations { margin-top: 36px; }
+  h2 { font-size: 26px; margin-bottom: 20px; }
+  .carousel-track { padding-inline: 7%; gap: 12px; }
+  .carousel-controls { gap: 14px; }
+  .abstract { margin: 38px 20px 56px; padding: 30px 0 0; }
+  .abstract p { font-size: 16px; text-align: left; }
+}
