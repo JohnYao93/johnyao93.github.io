@@ -62,7 +62,8 @@ const observer = new IntersectionObserver((entries) => {
     }
   }
 }, { threshold: [0.05, 0.6] });
-const videos = [...document.querySelectorAll('video')];
+// Videos marked data-manual (the scrubber) only play when the viewer asks.
+const videos = [...document.querySelectorAll('video:not([data-manual])')];
 videos.forEach((video) => {
   if (reducedMotion.matches) {
     video.autoplay = false;

@@ -108,6 +108,10 @@ h3 {
   display: block;
 }
 
+.work-item + .work-item {
+  margin-top: 28px;
+}
+
 .work-image img {
   display: block;
   width: 100%;
