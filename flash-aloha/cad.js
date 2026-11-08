@@ -2,25 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// Each isolate layer bolds the parts whose node names contain a `bold` keyword, leaves `keep` parts
-// as plain context, and hides everything else. Match the keywords to the node names in your GLB.
-const LAYERS = {
-  full: null,
-  frame: { bold: ['frame'], keep: ['table'] },
-  arms: { bold: ['arm', 'handle'], keep: ['table'] },
-  cameras: { bold: ['camera'], keep: ['table', 'frame', 'arm', 'handle'] },
-};
-
 const neutral = new THREE.MeshStandardMaterial({ color: 0xc9ced6, roughness: 0.7, metalness: 0.1 });
-const bold = new THREE.MeshStandardMaterial({ color: 0x1772d0, roughness: 0.45, metalness: 0.1 });
 const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x3a4048, transparent: true, opacity: 0.35 });
-const boldEdgeMaterial = new THREE.LineBasicMaterial({ color: 0x0b3d70 });
-
-function names(object) {
-  const chain = [];
-  for (let o = object; o; o = o.parent) if (o.name) chain.push(o.name.toLowerCase());
-  return chain.join(' ');
-}
 
 // Stand-in geometry, shown until the real models are exported to the paths in data-model.
 const box = (w, h, d) => new THREE.BoxGeometry(w, h, d);
@@ -35,27 +18,54 @@ function adder(root) {
   };
 }
 
+const REAL_ARM = '/static/models/rs-arm.glb?v=2';
+// Wrist camera on the real arm, in the arm model's frame: where the phone camera sat, aimed past the fingertips.
+const WRIST_CAMERA = { position: [0.0211, 0.3075, 0.3335], target: [0.0767, 0.0659, 0.4294], up: [-0.056, 0.735, 0.675] };
+
+// A camera drawn as a small body with a viewing pyramid along its +Z, the direction lookAt aims it.
+const frustumLine = new THREE.LineBasicMaterial({ color: 0x1772d0, transparent: true, opacity: 0.8 });
+const frustumFill = new THREE.MeshBasicMaterial({ color: 0x1772d0, transparent: true, opacity: 0.1, side: THREE.DoubleSide, depthWrite: false });
+function makeCamera(name, length, halfWidth, halfHeight) {
+  const body = new THREE.Mesh(box(length * 0.28, length * 0.2, length * 0.22), neutral);
+  body.name = name;
+  const c = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([x, y]) => new THREE.Vector3(x * halfWidth, y * halfHeight, length));
+  const o = new THREE.Vector3();
+  const lines = [o, c[0], o, c[1], o, c[2], o, c[3], c[0], c[1], c[1], c[2], c[2], c[3], c[3], c[0]];
+  body.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lines), frustumLine));
+  const fill = new THREE.BufferGeometry().setFromPoints([o, c[0], c[1], o, c[1], c[2], o, c[2], c[3], o, c[3], c[0]]);
+  const pyramid = new THREE.Mesh(fill, frustumFill);
+  pyramid.userData.decoration = true;
+  body.add(pyramid);
+  return body;
+}
+function aim(object, position, target, up = [0, 1, 0]) {
+  object.position.set(...position);
+  object.up.set(...up);
+  object.lookAt(new THREE.Vector3(...target));
+  return object;
+}
+
 const PLACEHOLDERS = {
   rig() {
     const root = new THREE.Group();
     const add = adder(root);
     add('table', box(1.4, 0.04, 0.8), 0, -0.02, 0);
-    for (const x of [-0.65, 0.65]) add('frame-post', box(0.03, 0.9, 0.03), x, 0.45, -0.35);
-    add('frame-top', box(1.33, 0.03, 0.03), 0, 0.9, -0.35);
-    add('frame-boom', box(0.03, 0.03, 0.4), 0, 0.9, -0.15);
-    add('camera-top', box(0.09, 0.03, 0.04), 0, 0.87, 0.05);
+    // Overhead camera: a small pillar on the arms' side of the table, with a short boom, looking down.
+    add('pillar-post', box(0.035, 0.75, 0.035), 0, 0.375, -0.37);
+    add('pillar-boom', box(0.025, 0.025, 0.3), 0, 0.74, -0.23);
+    const overhead = makeCamera('camera-overhead', 0.2, 0.15, 0.1);
+    root.add(aim(overhead, [0, 0.72, -0.08], [0, 0, 0.12], [0, 0, -1]));
     for (const side of [-1, 1]) {
       const arm = new THREE.Group();
-      arm.name = side < 0 ? 'arm-left' : 'arm-right';
+      // Named from the robot's point of view (operator behind the arms), so the arm at -x is its right arm.
+      arm.name = side < 0 ? 'arm-right' : 'arm-left';
       arm.position.set(side * 0.35, 0, -0.2);
       root.add(arm);
-      add('arm-base', cylinder(0.05, 0.08), 0, 0.04, 0, arm);
-      add('arm-upper', box(0.04, 0.3, 0.04), 0, 0.23, 0, arm).rotation.x = 0.35;
-      add('arm-fore', box(0.035, 0.035, 0.28), 0, 0.36, 0.18, arm);
-      add('arm-wrist', box(0.06, 0.05, 0.06), 0, 0.34, 0.34, arm);
-      add('handle-a', cylinder(0.012, 0.11), side * 0.05, 0.3, 0.34, arm);
-      add('handle-b', cylinder(0.012, 0.11), -side * 0.05, 0.3, 0.34, arm);
-      add('camera-wrist', box(0.05, 0.025, 0.03), 0, 0.38, 0.37, arm);
+      // Both arms are the real RS arm (exported from the MuJoCo model, no phone mount); they load in later.
+      // The right one (-x) is mirrored so the pair is symmetric.
+      arm.userData.model = REAL_ARM;
+      arm.userData.mirror = side < 0;
+      arm.userData.wristCamera = true;
     }
     return root;
   },
@@ -78,10 +88,15 @@ const PLACEHOLDERS = {
   },
 };
 
+// The view buttons fly the 3D camera to a camera in the scene (by node name) or back to the overview.
+const OVERVIEW_FOV = 35;
+const CAMERA_FOV = 53; // the viewing pyramids are drawn at about this vertical field of view
+const FLIGHT_MS = 900;
+const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+
 function setupViewer(viewer) {
   const host = viewer.querySelector('.cad-canvas');
-  const buttons = [...viewer.querySelectorAll('.cad-layers button')];
-  const parts = [];
+  const buttons = [...viewer.querySelectorAll('.cad-views button')];
   let needsRender = true;
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -94,59 +109,104 @@ function setupViewer(viewer) {
   sun.position.set(2, 4, 3);
   scene.add(sun);
 
-  const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
+  const camera = new THREE.PerspectiveCamera(OVERVIEW_FOV, 1, 0.01, 100);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enableZoom = false; // keep the page scrolling normally over the viewer
   controls.enablePan = false;
 
-  function isolate(layerName) {
-    const layer = LAYERS[layerName];
-    const matches = (part, keywords) => keywords.some((k) => part.names.includes(k));
-    for (const part of parts) {
-      const isBold = layer && matches(part, layer.bold);
-      const isKept = !layer || isBold || matches(part, layer.keep);
-      part.mesh.visible = isKept;
-      part.mesh.material = isBold ? bold : layer ? neutral : part.original;
-      part.edges.material = isBold ? boldEdgeMaterial : edgeMaterial;
+  // Real CAD exports are dense enough that outline edges turn into noise, so they are drawn shaded only.
+  function addEdges(root) {
+    root.traverse((object) => {
+      if (!object.isMesh || object.userData.decoration) return;
+      object.add(new THREE.LineSegments(new THREE.EdgesGeometry(object.geometry, 30), edgeMaterial));
+    });
+  }
+
+  // Groups in a placeholder can name a real model to load into themselves (userData.model).
+  function loadSubmodels(root) {
+    const slots = [];
+    root.traverse((object) => object.userData.model && slots.push(object));
+    for (const slot of slots) {
+      new GLTFLoader().load(slot.userData.model, (gltf) => {
+        if (slot.userData.mirror) gltf.scene.scale.x = -1;
+        if (slot.userData.wristCamera) {
+          const { position, target, up } = WRIST_CAMERA;
+          const side = slot.name.replace('arm-', '');
+          gltf.scene.add(aim(makeCamera(`camera-wrist-${side}`, 0.09, 0.06, 0.045), position, target, up));
+        }
+        slot.add(gltf.scene);
+        needsRender = true;
+      });
     }
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layer === layerName)));
+  }
+
+  let overview = null;
+  let flight = null;
+  let hidden = null; // the camera body we are looking through, hidden so it does not block the view
+
+  function poseFor(name) {
+    if (name === 'overview') return overview && { ...overview, fov: OVERVIEW_FOV, body: null };
+    const body = scene.getObjectByName(name);
+    if (!body) return null;
+    scene.updateMatrixWorld();
+    const position = body.getWorldPosition(new THREE.Vector3());
+    const forward = body.getWorldDirection(new THREE.Vector3());
+    return { position, target: position.clone().addScaledVector(forward, 0.3), fov: CAMERA_FOV, body };
+  }
+
+  function flyTo(name) {
+    const pose = poseFor(name);
+    if (!pose) return;
+    if (hidden) hidden.visible = true;
+    hidden = null;
+    flight = {
+      from: { position: camera.position.clone(), target: controls.target.clone(), fov: camera.fov },
+      to: pose,
+      start: performance.now(),
+    };
+    controls.enabled = false;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === name)));
     needsRender = true;
   }
 
-  function show(root) {
+  function show(root, withEdges = true) {
     scene.add(root);
-    root.traverse((object) => {
-      if (!object.isMesh) return;
-      const edges = new THREE.LineSegments(new THREE.EdgesGeometry(object.geometry, 30), edgeMaterial);
-      object.add(edges);
-      parts.push({ mesh: object, edges, names: names(object), original: object.material });
-    });
+    if (withEdges) addEdges(root);
 
     const bounds = new THREE.Box3().setFromObject(root);
     const center = bounds.getCenter(new THREE.Vector3());
     const radius = bounds.getSize(new THREE.Vector3()).length() / 2;
     controls.target.copy(center);
-    camera.position.copy(center).add(new THREE.Vector3(1, 0.65, 1.2).normalize().multiplyScalar(radius * 3));
-    camera.near = radius / 100;
+    // data-view on the viewer sets the starting direction from the model to the camera.
+    const view = viewer.dataset.view ? viewer.dataset.view.split(',').map(Number) : [1, 0.65, 1.2];
+    camera.position.copy(center).add(new THREE.Vector3(...view).normalize().multiplyScalar(radius * 3));
+    camera.near = radius / 200;
     camera.far = radius * 20;
     camera.updateProjectionMatrix();
     controls.update();
-    isolate('full');
+    overview = { position: camera.position.clone(), target: center.clone() };
+    needsRender = true;
   }
 
   new GLTFLoader().load(
     viewer.dataset.model,
-    (gltf) => show(gltf.scene),
+    (gltf) => {
+      // data-mirror shows the model's mirror image (e.g. the right-hand handles from the left-hand export).
+      if (viewer.dataset.mirror !== undefined) gltf.scene.scale.x = -1;
+      show(gltf.scene, false);
+    },
     undefined,
     () => {
-      show(PLACEHOLDERS[viewer.dataset.placeholder || 'rig']());
+      const placeholder = PLACEHOLDERS[viewer.dataset.placeholder || 'rig']();
+      show(placeholder);
+      loadSubmodels(placeholder);
       const hint = viewer.querySelector('.cad-hint');
       hint.textContent += ' · placeholder model';
     },
   );
 
-  buttons.forEach((b) => b.addEventListener('click', () => isolate(b.dataset.layer)));
+  buttons.forEach((b) => b.addEventListener('click', () => flyTo(b.dataset.view)));
   controls.addEventListener('change', () => { needsRender = true; });
   new ResizeObserver(() => {
     const { clientWidth: w, clientHeight: h } = host;
@@ -156,7 +216,23 @@ function setupViewer(viewer) {
     needsRender = true;
   }).observe(host);
 
-  renderer.setAnimationLoop(() => {
+  renderer.setAnimationLoop((now) => {
+    if (flight) {
+      const t = Math.min(1, (now - flight.start) / FLIGHT_MS);
+      const k = ease(t);
+      camera.position.lerpVectors(flight.from.position, flight.to.position, k);
+      controls.target.lerpVectors(flight.from.target, flight.to.target, k);
+      camera.fov = flight.from.fov + (flight.to.fov - flight.from.fov) * k;
+      camera.updateProjectionMatrix();
+      camera.lookAt(controls.target);
+      if (t === 1) {
+        hidden = flight.to.body;
+        if (hidden) hidden.visible = false;
+        flight = null;
+        controls.enabled = true;
+      }
+      needsRender = true;
+    }
     controls.update();
     if (!needsRender) return;
     needsRender = false;

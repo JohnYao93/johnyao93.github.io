@@ -58,7 +58,7 @@ h2 { margin: 0 0 26px; text-align: center; font-size: 30px; line-height: 1.25; f
 .slide { flex: 0 0 100%; min-width: 0; margin: 0; scroll-snap-align: center; scroll-snap-stop: always; }
 .slide video { border-radius: 5px; }
 /* Hide floating badges injected by the Video Speed Controller extension. */
-.carousel .vsc-controller { display: none !important; }
+.vsc-controller { display: none !important; }
 figcaption { text-align: center; margin-top: 16px; font-size: 19px; }
 .carousel-controls { display: flex; justify-content: center; align-items: center; gap: 22px; margin-top: 12px; }
 [hidden] { display: none !important; }
@@ -140,6 +140,16 @@ figcaption { text-align: center; margin-top: 16px; font-size: 19px; }
 .graph-reset { flex: none; padding: 4px 10px; border: 1px solid #d5d8dc; border-radius: 6px; background: #fff; color: #444; font-size: 12px; cursor: pointer; }
 .graph-hint { margin: 10px 0 0; text-align: center; color: #888; font-size: 13px; }
 .precision-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; align-items: start; }
+/* Handheld tracking: the real-time video and its reconstruction side by side at equal height (columns in
+   proportion to their aspect ratios, 16:9 and 1280:1092), on the scrubber's shared timeline. */
+.handheld-pair { display: grid; grid-template-columns: 1.778fr 1.172fr; gap: 12px; align-items: start; }
+.handheld-pair .media.sim { background: #fff; border: 1px solid #e3e6ea; }
+.handheld-pair .media.sim video { aspect-ratio: 1280 / 1092; background: #fff; }
+.handheld-pair video { cursor: pointer; }
+.handheld-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 18px; margin: 8px 0 0; color: #555; font-size: 13px; }
+.handheld-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.handheld-legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; }
+.handheld-legend b { font-weight: normal; color: #111; }
 
 /* Synced multi-view video: all play together, one is shown. */
 .view-switch { display: flex; flex-direction: column; align-items: center; gap: 14px; }
@@ -215,7 +225,8 @@ figcaption { text-align: center; margin-top: 16px; font-size: 19px; }
 @media (max-width: 760px) {
   .setup-grid { grid-template-columns: 1fr; }
   .cad-viewer { min-height: 380px; }
-  .graph-grid, .precision-row { grid-template-columns: 1fr; }
+  .graph-grid, .precision-row, .handheld-pair { grid-template-columns: 1fr; }
+  .handheld-legend { justify-content: flex-start; }
 }
 
 @media (max-width: 640px) {
@@ -244,3 +255,46 @@ figcaption { text-align: center; margin-top: 16px; font-size: 19px; }
   .scrub-speed { margin-left: auto; }
   .abstract p { font-size: 16px; text-align: left; }
 }
+
+/* Title block, styled after mobile-aloha.github.io: large name, subtitle beneath. */
+.paper-header .publication-title {
+  margin: 0 0 14px;
+  font-family: 'Google Sans', Arial, Helvetica, sans-serif;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.125;
+  letter-spacing: normal;
+  color: #363636;
+}
+.paper-header .publication-subtitle {
+  margin: 0 0 26px;
+  font-family: 'Google Sans', Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: normal;
+  color: #4a4a4a;
+}
+.paper-header .authors { font-family: 'Google Sans', Arial, Helvetica, sans-serif; font-size: 24px; }
+
+/* Autonomous Skills: two-column video grid. */
+.skills { max-width: 1120px; }
+.skills h2 { margin-bottom: 32px; }
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.skill { margin: 0; }
+.skill .media { border: 1px solid #bbb; border-radius: 10px; }
+.skill figcaption { margin-top: 10px; font-size: 17px; }
+.skill .placeholder { display: grid; place-items: center; aspect-ratio: 16 / 9; background: #f0f2f5; border-style: dashed; color: #999; font-size: 15px; }
+.skills + .citation { margin-top: 0; }
+
+@media (max-width: 640px) {
+  .paper-header .publication-title { font-size: 36px; }
+  .paper-header .publication-subtitle { font-size: 22px; }
+  .paper-header .authors { font-size: 18px; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+.feature h2 + .media, .feature h2 + .scrubber { margin-top: 26px; }
+.affiliation-logo { display: block; width: min(380px, 80%); height: auto; margin: 18px auto 22px; }
+.clip-switch { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.clip-switch .media { width: 100%; }
+.feature h2 + .setup-grid { margin-top: 26px; }

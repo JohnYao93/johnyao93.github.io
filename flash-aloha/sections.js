@@ -7,8 +7,14 @@ document.querySelectorAll('.media video').forEach((video) => {
   const sources = [...video.querySelectorAll('source')];
   const last = sources[sources.length - 1];
   const media = video.closest('.media');
-  if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) markMissing(media, 'Video coming soon');
-  else if (last) last.addEventListener('error', () => markMissing(media, 'Video coming soon'));
+  // Only a real load failure counts. networkState can read NO_SOURCE briefly while the browser is still
+  // picking a source, so it is checked after the page has loaded, not when this script runs.
+  const fail = () => markMissing(media, 'Video coming soon');
+  if (last) last.addEventListener('error', fail);
+  video.addEventListener('error', fail);
+  window.addEventListener('load', () => {
+    if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE && !video.currentSrc) fail();
+  });
 });
 document.querySelectorAll('.media img').forEach((img) => {
   const media = img.closest('.media');
@@ -54,17 +60,36 @@ document.querySelectorAll('.view-switch').forEach((group) => {
   });
 });
 
+// Independent clips: the buttons choose which video is shown; only that one plays, from the start.
+document.querySelectorAll('.clip-switch').forEach((group) => {
+  const videos = [...group.querySelectorAll('.stack video')];
+  const buttons = [...group.querySelectorAll('.segmented button')];
+  videos.forEach((video, i) => i !== 0 && video.setAttribute('inert', ''));
+  buttons.forEach((button, index) => button.addEventListener('click', () => {
+    videos.forEach((video, i) => {
+      const on = i === index;
+      video.classList.toggle('active', on);
+      video.toggleAttribute('inert', !on);
+      if (on) { video.currentTime = 0; video.play().catch(() => {}); } else video.pause();
+    });
+    buttons.forEach((b, i) => b.setAttribute('aria-pressed', String(i === index)));
+  }));
+});
+
 // Scrubber: a custom seek bar for stepping through a fast demonstration. It announces its time as a
 // `timeline` event so linked graphs can follow along. Until the video exists, a virtual clock of
-// data-duration seconds stands in for it.
+// data-duration seconds stands in for it. Any further videos in the scrubber share the first one's
+// timeline: they follow its play state, rate and position.
 document.querySelectorAll('.scrubber').forEach((scrubber) => {
   const video = scrubber.querySelector('video');
+  const followers = [...scrubber.querySelectorAll('video')].slice(1);
   const playButton = scrubber.querySelector('.scrub-play');
   const range = scrubber.querySelector('.scrub-range');
   const label = scrubber.querySelector('.scrub-time');
   const speeds = [...scrubber.querySelectorAll('.scrub-speed button')];
   const fallbackDuration = Number(scrubber.dataset.duration) || 4;
-  let hasVideo = video.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE;
+  // Assume the video exists until it fails to load; networkState is unreliable this early.
+  let hasVideo = true;
   let time = 0;
   let rate = 1;
   let playing = false;
@@ -75,6 +100,38 @@ document.querySelectorAll('.scrubber').forEach((scrubber) => {
   const sources = video.querySelectorAll('source');
   sources[sources.length - 1]?.addEventListener('error', () => { hasVideo = false; render(); });
 
+  // Coalesced seeking: while a video is still seeking, remember only the newest target and apply it once
+  // that seek lands, so a fast drag keeps presenting frames instead of aborting every seek in flight.
+  function seekVideo(v, t) {
+    t = Math.min(t, v.duration || t);
+    if (v.seeking) { v.pendingSeek = t; return; }
+    v.pendingSeek = null;
+    if (Math.abs(v.currentTime - t) > 1e-3) v.currentTime = t;
+  }
+  [video, ...followers].forEach((v) => {
+    v.addEventListener('seeked', () => {
+      if (v.pendingSeek == null) return;
+      const t = v.pendingSeek;
+      v.pendingSeek = null;
+      v.currentTime = t;
+    });
+    // Load the whole file into memory so seeking is local and never depends on HTTP range support.
+    const src = v.querySelector('source')?.src;
+    if (!src || !window.fetch) return;
+    fetch(src).then((r) => (r.ok ? r.blob() : null)).then((blob) => {
+      if (!blob) return;
+      v.addEventListener('loadedmetadata', () => seekVideo(v, time), { once: true });
+      v.src = URL.createObjectURL(blob);
+      v.playbackRate = rate;
+      if (playing) v.play().catch(() => {});
+    }).catch(() => {});
+  });
+  function follow(force) {
+    followers.forEach((f) => {
+      if (force) seekVideo(f, time);
+      else if (!f.seeking && Math.abs(f.currentTime - time) > 0.08) f.currentTime = Math.min(time, f.duration || time);
+    });
+  }
   function render() {
     const fraction = Math.min(1, time / duration());
     range.value = String(Math.round(fraction * 1000));
@@ -92,6 +149,7 @@ document.querySelectorAll('.scrubber').forEach((scrubber) => {
       return;
     }
     render();
+    follow(false);
     frame = requestAnimationFrame(loop);
   }
   function play() {
@@ -100,6 +158,8 @@ document.querySelectorAll('.scrubber').forEach((scrubber) => {
     playButton.classList.add('playing');
     playButton.setAttribute('aria-label', 'Pause');
     if (hasVideo) video.play().catch(() => {});
+    follow(true);
+    followers.forEach((f) => f.play().catch(() => {}));
     last = performance.now();
     cancelAnimationFrame(frame);
     frame = requestAnimationFrame(loop);
@@ -108,25 +168,29 @@ document.querySelectorAll('.scrubber').forEach((scrubber) => {
     playing = false;
     playButton.classList.remove('playing');
     playButton.setAttribute('aria-label', 'Play');
-    if (hasVideo) video.pause();
+    if (hasVideo) { video.pause(); time = video.currentTime; }
+    followers.forEach((f) => f.pause());
     cancelAnimationFrame(frame);
     render();
+    follow(true);
   }
   function seek(t) {
     time = Math.min(duration(), Math.max(0, t));
-    if (hasVideo) video.currentTime = time;
+    if (hasVideo) seekVideo(video, time);
     render();
+    follow(true);
   }
   scrubber.seek = (t) => { pause(); seek(t); };
 
   playButton.addEventListener('click', () => (playing ? pause() : play()));
-  video.addEventListener('click', () => playButton.click());
+  [video, ...followers].forEach((v) => v.addEventListener('click', () => playButton.click()));
   video.addEventListener('ended', pause);
-  video.addEventListener('loadedmetadata', render);
+  video.addEventListener('loadedmetadata', () => { hasVideo = true; render(); });
+  video.addEventListener('error', () => { hasVideo = false; render(); });
   range.addEventListener('input', () => scrubber.seek((Number(range.value) / 1000) * duration()));
   speeds.forEach((button) => button.addEventListener('click', () => {
     rate = Number(button.dataset.rate);
-    video.playbackRate = rate;
+    [video, ...followers].forEach((v) => { v.playbackRate = rate; });
     speeds.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
   }));
   render();

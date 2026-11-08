@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Flash ALOHA: Learning Fast and Precise Manipulation. A system for learning near-human-speed bimanual manipulation from demonstrations.">
   <title>Flash ALOHA: Learning Fast and Precise Manipulation</title>
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans:400,700|Noto+Sans&amp;display=swap">
+  <link rel="stylesheet" href="style.css?v=18">
   <script type="importmap">
     {
       "imports": {
@@ -14,14 +15,14 @@
       }
     }
   </script>
-  <script src="carousel.js?v=2" defer></script>
-  <script src="sections.js" defer></script>
-  <script src="cad.js" type="module"></script>
+  <script src="sections.js?v=6" defer></script>
+  <script src="cad.js?v=10" type="module"></script>
 </head>
 <body>
   <header class="paper-header">
     <a class="home-link" href="/">Home</a>
-    <h1>Flash ALOHA: Learning Fast<br class="desktop-break"> and Precise Manipulation</h1>
+    <h1 class="publication-title"><span aria-hidden="true">⚡</span> Flash ALOHA</h1>
+    <h2 class="publication-subtitle">Learning Fast and Precise Manipulation</h2>
     <p class="authors">
       <a href="/">John Hua Yao</a>
       <a href="https://scholar.google.com/citations?user=3wFmCXAAAAAJ&amp;hl=zh-CN">Qi Wu</a>
@@ -29,7 +30,7 @@
       <a href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a>
       <a href="https://zipengfu.github.io/">Zipeng Fu</a>
     </p>
-    <p class="affiliation">Stanford University</p>
+    <img class="affiliation-logo" src="/static/images/flash-aloha/stanford-logo.jpg" width="1150" height="152" alt="Stanford University">
     <div class="publication-links">
       <div class="paper-venue">
         <a class="paper-link" href="/static/files/flash-aloha.pdf">
@@ -51,50 +52,82 @@
 
   <main>
     <section class="hero hero-gif" aria-label="Flash ALOHA overview video">
-      <img src="/static/images/flash-aloha/toss-catch.gif?v=9" width="1080" height="608" alt="Flash ALOHA tossing and catching a ball. No RL, 50 demonstrations, RGB input only.">
+      <img src="/static/images/flash-aloha/toss-catch.gif?v=10" width="1080" height="608" alt="Flash ALOHA tossing and catching a ball. Autonomous, 50 demonstrations, RGB input only.">
     </section>
 
     <section class="abstract" aria-labelledby="abstract-title">
       <h2 id="abstract-title">Abstract</h2>
-      <p>Learning from human demonstrations has enabled robots to acquire a wide range of manipulation skills, but learned policies typically execute far slower than ordinary humans. This speed gap is mainly due to lack of an interface for collecting demonstration data at high speed, and the difficulty in training policies that can robustly execute high-speed motions. In this paper, we present Flash ALOHA, a system for learning fast and precise robotic manipulation. Our system uses kinesthetic teaching to intuitively collect near-human-speed demonstrations on a backdrivable bimanual platform, yielding natural, fast, and joint-accurate trajectories. The core insight is that speed depends on the ability of the system to capture real-time data with high fidelity. We also present a learning pipeline that enables smooth high-speed execution through test-time action smoothing and aligns the visual data distribution between data collection and deployment with masking. Given 50 demonstrations for each task, Flash ALOHA autonomously completes bimanual tasks such as ball tossing and catching, folding shorts, battery insertion, and bussing tables for over 80% success rates while close to human speed.</p>
+      <p>Learning from human demonstrations has enabled robots to acquire a wide range of manipulation skills, but learned policies typically execute far slower than ordinary humans. This speed gap is mainly due to lack of an interface for precisely collecting demonstration data at high speed, and the difficulty in training policies that can robustly execute high-speed motions. In this paper, we present Flash ALOHA, a practical system for learning fast and precise robotic manipulation. Our system uses kinesthetic teaching to intuitively collect accurate and near-human-speed demonstrations on a backdrivable bimanual platform, yielding natural and fast trajectories. Our learning pipeline consists of two components: a lightweight smoothing algorithm to address tracking instabilities produced by action chunking, and for visual alignment we mask out the operator visible in the camera views. Given 50 demonstrations for each task, Flash ALOHA autonomously completes bimanual tasks such as ball tossing and catching, folding shorts, battery insertion, and bussing tables at over 80% success rates while close to human speed.</p>
     </section>
 
-    <section class="feature" aria-labelledby="feedback-title">
-      <h2 id="feedback-title">High speed manipulation data, from direct feedback</h2>
-      <p class="caption">Caption coming soon.</p><!-- TODO: caption -->
-      <div class="media">
-        <video muted loop playsinline controls preload="metadata" aria-label="Collecting high speed demonstrations by direct kinesthetic teaching"><source src="/static/videos/flash-aloha/feedback.mp4" type="video/mp4"></video>
+    <section class="feature skills" aria-labelledby="skills-title">
+      <h2 id="skills-title">Autonomous Skills</h2>
+      <div class="skills-grid">
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/shorts.jpg?v=2" aria-label="Fold shorts, autonomous rollout"><source src="/static/videos/flash-aloha/shorts.mp4?v=12" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/cups.jpg?v=2" aria-label="Unstack cups, autonomous rollout"><source src="/static/videos/flash-aloha/cups.mp4?v=12" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/battery.jpg?v=2" aria-label="Insert battery, autonomous rollout"><source src="/static/videos/flash-aloha/battery.mp4?v=12" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/table.jpg?v=2" aria-label="Bus table, autonomous rollout"><source src="/static/videos/flash-aloha/table.mp4?v=12" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/shirt.jpg?v=2" aria-label="Fold shirt, autonomous rollout"><source src="/static/videos/flash-aloha/shirt.mp4?v=12" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/skill-2491.jpg" aria-label="Load dishwasher, autonomous rollout"><source src="/static/videos/flash-aloha/skill-2491.mp4?v=11" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/skill-6270.jpg" aria-label="Pass butter, autonomous rollout"><source src="/static/videos/flash-aloha/skill-6270.mp4?v=11" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/skill-6349.jpg" aria-label="Help put on a jacket, autonomous rollout"><source src="/static/videos/flash-aloha/skill-6349.mp4?v=11" type="video/mp4"></video></div>
+        </figure>
+        <figure class="skill">
+          <div class="media"><video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/skill-6296.jpg" aria-label="Catch towel, autonomous rollout"><source src="/static/videos/flash-aloha/skill-6296.mp4?v=11" type="video/mp4"></video></div>
+        </figure>
       </div>
     </section>
 
-    <section class="feature" aria-labelledby="setup-title">
-      <h2 id="setup-title">Simple and practical setup</h2>
-      <p class="caption">Operators grip two handles on each end effector and backdrive the low-gear-ratio arms directly, while real-time gravity compensation makes the arms feel nearly weightless. There is no leader arm to build or calibrate. Drag either model to look around: the full platform on the left, with buttons to isolate each part, and a close-up of the scissor handles on the right.</p>
-      <div class="setup-grid">
-        <div class="cad-viewer" data-model="/static/models/flash-aloha.glb">
-          <div class="segmented cad-layers" role="group" aria-label="Isolate components">
-            <button type="button" data-layer="full" aria-pressed="true">Full model</button>
-            <button type="button" data-layer="frame" aria-pressed="false">Frame</button>
-            <button type="button" data-layer="arms" aria-pressed="false">Arms &amp; handles</button>
-            <button type="button" data-layer="cameras" aria-pressed="false">Cameras</button>
-          </div>
-          <div class="cad-canvas" role="img" aria-label="Interactive 3D model of the Flash ALOHA platform. Drag to rotate."></div>
-          <p class="cad-hint">Drag to rotate</p>
+    <section class="feature" aria-labelledby="replay-title">
+      <h2 id="replay-title">Replay Day</h2>
+      <div class="media">
+        <video autoplay muted loop playsinline controls preload="metadata" aria-label="Replay Day"><source src="/static/videos/flash-aloha/replay-day.mp4" type="video/mp4"></video>
+      </div>
+    </section>
+
+    <section class="feature" aria-labelledby="puppeteering-title">
+      <h2 id="puppeteering-title">Speeding Up Puppeteering</h2>
+      <div class="clip-switch">
+        <div class="segmented" role="group" aria-label="Puppeteering speed">
+          <button type="button" aria-pressed="true">Normal</button>
+          <button type="button" aria-pressed="false">Double Time</button>
+          <button type="button" aria-pressed="false">Skipping</button>
         </div>
-        <div class="cad-viewer" data-model="/static/models/scissor-handles.glb" data-placeholder="handles">
-          <div class="cad-canvas" role="img" aria-label="Interactive 3D close-up of the scissor handles. Drag to rotate."></div>
-          <p class="cad-hint">Scissor handles · drag to rotate</p>
+        <div class="media stack">
+          <video class="active" autoplay muted loop playsinline controls preload="auto" poster="/static/images/flash-aloha/puppeteer-normal.jpg" aria-label="Puppeteering, normal"><source src="/static/videos/flash-aloha/puppeteer-normal.mp4" type="video/mp4"></video>
+          <video muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/puppeteer-double.jpg" aria-label="Puppeteering, double time"><source src="/static/videos/flash-aloha/puppeteer-double.mp4" type="video/mp4"></video>
+          <video muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/puppeteer-skipping.jpg" aria-label="Puppeteering, skipping"><source src="/static/videos/flash-aloha/puppeteer-skipping.mp4" type="video/mp4"></video>
         </div>
       </div>
     </section>
 
     <section class="feature" aria-labelledby="precision-title">
-      <h2 id="precision-title">Recording precision at high speed</h2>
-      <p class="caption">Scrub through a demonstration to see how much happens in a fraction of a second.</p><!-- TODO: caption -->
-      <div class="scrubber" id="precision-timeline" data-duration="4">
-        <div class="media">
-          <video data-manual muted playsinline preload="auto" aria-label="High speed demonstration, controlled by the scrubber below"><source src="/static/videos/flash-aloha/precision.mp4" type="video/mp4"></video>
+      <h2 id="precision-title">Handheld Devices Tracking Error</h2>
+      <div class="scrubber" id="precision-timeline" data-duration="12.61">
+        <div class="handheld-pair">
+          <div class="media">
+            <video data-manual muted playsinline preload="metadata" aria-label="The arm replaying a free-space trajectory with the phone mounted, controlled by the scrubber below"><source src="/static/videos/flash-aloha/handheld-real.mp4?v=1" type="video/mp4"></video>
+          </div>
+          <div class="media sim">
+            <video data-manual muted playsinline preload="metadata" aria-label="The same take reconstructed from the joint encoders, with the true and visual-inertial end-effector paths"><source src="/static/videos/flash-aloha/handheld-sim.mp4?v=1" type="video/mp4"></video>
+          </div>
         </div>
+        <p class="handheld-legend"><span><i style="background:#56c1ff"></i>End effector (ground truth)</span><span><i style="background:#ff968d"></i>Visual-inertial estimate</span><span><b>→</b>Error</span></p>
         <div class="scrub-bar">
           <button class="scrub-play" type="button" aria-label="Play">
             <svg class="icon-play" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
@@ -102,179 +135,53 @@
           </button>
           <input class="scrub-range" type="range" min="0" max="1000" step="1" value="0" aria-label="Seek video">
           <output class="scrub-time">0.00 s</output>
-          <div class="segmented scrub-speed" role="group" aria-label="Playback speed">
-            <button type="button" data-rate="1" aria-pressed="true">1×</button>
-            <button type="button" data-rate="0.5" aria-pressed="false">½×</button>
-            <button type="button" data-rate="0.25" aria-pressed="false">¼×</button>
-          </div>
         </div>
         <div class="graph-grid">
-          <figure class="graph" data-src="/static/data/flash-aloha/graph-1.json" data-timeline="precision-timeline" data-placeholder="velocity">
-            <figcaption class="graph-title">Graph 1</figcaption><!-- TODO: graph title -->
-            <svg class="graph-plot" viewBox="0 0 460 260" role="img" aria-label="Graph 1. Drag to pan, scroll to zoom, click to jump the video."></svg>
+          <figure class="graph" data-src="/static/data/flash-aloha/graph-1.json?v=1" data-timeline="precision-timeline" data-placeholder="velocity">
+            <figcaption class="graph-title">End-Effector Speed</figcaption>
+            <svg class="graph-plot" viewBox="0 0 460 260" role="img" aria-label="End-effector speed. Drag to pan, scroll to zoom, click to jump the video."></svg>
             <div class="graph-footer">
               <p class="graph-readout" aria-live="polite"></p>
               <button class="graph-reset" type="button" hidden>Reset zoom</button>
             </div>
           </figure>
-          <figure class="graph" data-src="/static/data/flash-aloha/graph-2.json" data-timeline="precision-timeline" data-placeholder="error">
-            <figcaption class="graph-title">Graph 2</figcaption><!-- TODO: graph title -->
-            <svg class="graph-plot" viewBox="0 0 460 260" role="img" aria-label="Graph 2. Drag to pan, scroll to zoom, click to jump the video."></svg>
+          <figure class="graph" data-src="/static/data/flash-aloha/graph-2.json?v=1" data-timeline="precision-timeline" data-placeholder="error">
+            <figcaption class="graph-title">Visual-Inertial Tracking Error</figcaption>
+            <svg class="graph-plot" viewBox="0 0 460 260" role="img" aria-label="Visual-inertial tracking error. Drag to pan, scroll to zoom, click to jump the video."></svg>
             <div class="graph-footer">
               <p class="graph-readout" aria-live="polite"></p>
               <button class="graph-reset" type="button" hidden>Reset zoom</button>
             </div>
           </figure>
         </div>
-        <p class="graph-hint">Both graphs follow the video. Scroll over a graph to zoom, drag to pan, click to jump to that moment, and double-click to reset.</p>
-      </div>
-      <div class="precision-row">
-        <figure class="media still">
-          <img src="/static/images/flash-aloha/precision.jpg" alt=""><!-- TODO: image and alt text -->
-        </figure>
-        <div class="media">
-          <video muted loop playsinline controls preload="metadata" aria-label="High speed recording"><source src="/static/videos/flash-aloha/precision-2.mp4" type="video/mp4"></video>
-        </div>
+        <p class="graph-hint">Both videos and both graphs share one timeline. Scroll over a graph to zoom, drag to pan, click to jump to that moment, and double-click to reset.</p>
       </div>
     </section>
 
-    <section class="feature" aria-labelledby="masking-title">
-      <h2 id="masking-title">Masking</h2>
-      <p class="caption">During data collection, the operator's hands and arms are in view of the cameras; at deployment the robot is alone. Using forward kinematics and the calibrated transform between the arms, we compute where the handles appear in every camera and mask those regions in real time, both in training and at deployment, so the policy sees the same visual distribution in both.</p>
-      <div class="view-switch">
-        <div class="segmented" role="group" aria-label="Camera view">
-          <button type="button" aria-pressed="true">Top</button>
-          <button type="button" aria-pressed="false">Left wrist</button>
-          <button type="button" aria-pressed="false">Right wrist</button>
-        </div>
-        <div class="media stack">
-          <video class="active" muted loop playsinline controls preload="auto" aria-label="Masking, top camera"><source src="/static/videos/flash-aloha/mask-top.mp4" type="video/mp4"></video>
-          <video muted loop playsinline controls preload="auto" aria-label="Masking, left wrist camera"><source src="/static/videos/flash-aloha/mask-left.mp4" type="video/mp4"></video>
-          <video muted loop playsinline controls preload="auto" aria-label="Masking, right wrist camera"><source src="/static/videos/flash-aloha/mask-right.mp4" type="video/mp4"></video>
-        </div>
-      </div>
-    </section>
-
-    <section class="feature" aria-labelledby="smoothing-title">
-      <h2 id="smoothing-title">Smoothing</h2>
-      <p class="caption">At high speed, the jumps between consecutive action chunks become large enough to destabilize the robot. Each new chunk is predicted <var>H</var> steps before the previous one runs out, and over that overlap we blend the two with a sigmoid weight. Drag the numbers in the equation to change the blending horizon <var>H</var> and the time scale <var>σ</var>, which sets how steep the sigmoid is, or flip to temporal ensembling to compare.</p>
-
-      <div class="smoothing-demo">
-        <div class="method-toggle">
-          <div class="segmented" role="group" aria-label="Smoothing method">
-            <button type="button" data-panel="ours" aria-pressed="true">Test-time smoothing (ours)</button>
-            <button type="button" data-panel="te" aria-pressed="false">Temporal ensembling</button>
+    <section class="feature" aria-labelledby="setup-title">
+      <h2 id="setup-title">Simple and practical setup</h2>
+      <div class="setup-grid">
+        <div class="cad-viewer" data-model="/static/models/flash-aloha.glb">
+          <div class="segmented cad-layers cad-views" role="group" aria-label="Camera view">
+            <button type="button" data-view="overview" aria-pressed="true">Overview</button>
+            <button type="button" data-view="camera-overhead" aria-pressed="false">Overhead</button>
+            <button type="button" data-view="camera-wrist-left" aria-pressed="false">Left wrist</button>
+            <button type="button" data-view="camera-wrist-right" aria-pressed="false">Right wrist</button>
           </div>
+          <div class="cad-canvas" role="img" aria-label="Interactive 3D model of the Flash ALOHA platform. Drag to rotate."></div>
+          <p class="cad-hint">Drag to rotate</p>
         </div>
-        <div class="method-panel" data-panel="ours">
-        <p class="equation" aria-label="Sigmoid blending weight">
-          <span class="eq-line"><var>w</var>(<var>t′</var>) = sigmoid<span class="paren">(</span>
-            <span class="frac"><span class="frac-top">(<var>t′</var> − (<var>t</var> + <var>T</var> − <span class="num" data-param="H" role="slider" tabindex="0" aria-label="Blending horizon H">8</span>)) − <span class="num" data-param="H" aria-hidden="true">8</span>/2</span><span class="frac-bottom"><span class="num" data-param="sigma" role="slider" tabindex="0" aria-label="Sigmoid time scale sigma">1.5</span></span></span>
-            <span class="paren">)</span></span>
-          <span class="eq-line"><var>a<sub>t′</sub></var> = (1 − <var>w</var>(<var>t′</var>)) · <var>q̂</var><sup>1</sup><sub><var>t′</var>+1</sub> + <var>w</var>(<var>t′</var>) · <var>q̂</var><sup>2</sup><sub><var>t′</var>+1</sub></span>
-        </p>
-        <svg class="smoothing-plot" viewBox="0 0 720 360" role="img" aria-label="Two overlapping action chunks and the blended command"></svg>
-        <div class="smoothing-controls">
-          <label><span>Blending horizon <var>H</var></span><input type="range" data-param="H" min="2" max="16" step="1" value="8"></label>
-          <label><span>Time scale <var>σ</var> <small>(smaller is steeper)</small></span><input type="range" data-param="sigma" min="0.25" max="5" step="0.25" value="1.5"></label>
-        </div>
-        <ul class="plot-legend">
-          <li><span class="swatch chunk1"></span>Chunk 1, <var>q̂</var><sup>1</sup></li>
-          <li><span class="swatch chunk2"></span>Chunk 2, <var>q̂</var><sup>2</sup></li>
-          <li><span class="swatch blended"></span>Commanded action <var>a</var></li>
-          <li><span class="swatch raw"></span>No smoothing</li>
-        </ul>
-        <p class="smoothing-stat" aria-live="polite"></p>
-        </div>
-        <div class="method-panel" data-panel="te" hidden>
-          <p class="equation" aria-label="Temporal ensembling">
-            <span class="eq-line"><var>a<sub>t</sub></var> = <span class="frac"><span class="frac-top">∑<sub><var>i</var></sub> <var>w<sub>i</sub></var> · <var>â</var><sup>(<var>i</var>)</sup><sub><var>t</var></sub></span><span class="frac-bottom">∑<sub><var>i</var></sub> <var>w<sub>i</sub></var></span></span>, &nbsp; <var>w<sub>i</sub></var> = exp(−<var>m</var> · <var>i</var>)</span>
-          </p>
-          <svg class="te-plot" viewBox="0 0 720 300" role="img" aria-label="Temporal ensembling: every chunk that covers the current timestep contributes a prediction, and the action is their weighted average"></svg>
-          <ul class="plot-legend">
-            <li><span class="swatch te-chunk"></span>Chunks predicted at earlier timesteps</li>
-            <li><span class="dot-swatch"></span>Each chunk's prediction for <var>t</var> (size = weight)</li>
-            <li><span class="dot-swatch result"></span>Executed action <var>a<sub>t</sub></var></li>
-          </ul>
-          <p class="te-explain">Temporal ensembling (from ACT) queries the policy at every timestep, so every action is covered by many overlapping chunks. The executed action <var>a<sub>t</sub></var> is a weighted average of all of their predictions for timestep <var>t</var>, where <var>â</var><sup>(<var>i</var>)</sup><sub><var>t</var></sub> is the <var>i</var>-th prediction, counting from the oldest, and <var>m</var> sets how quickly newer predictions are folded in. The result is smooth, but older predictions keep pulling on every action, and in our experiments policies with temporal ensembling executed at roughly half the speed. Our method only blends across the short overlap between two consecutive chunks.</p>
-        </div>
-      </div>
-
-      <div class="view-switch">
-        <div class="segmented" role="group" aria-label="Smoothing method">
-          <button type="button" aria-pressed="true">Test-time smoothing</button>
-          <button type="button" aria-pressed="false">No smoothing</button>
-          <button type="button" aria-pressed="false">Temporal ensembling</button>
-        </div>
-        <div class="media stack">
-          <video class="active" muted loop playsinline controls preload="auto" aria-label="Rollout with test-time smoothing"><source src="/static/videos/flash-aloha/smoothing-ours.mp4" type="video/mp4"></video>
-          <video muted loop playsinline controls preload="auto" aria-label="Rollout with no smoothing"><source src="/static/videos/flash-aloha/smoothing-none.mp4" type="video/mp4"></video>
-          <video muted loop playsinline controls preload="auto" aria-label="Rollout with temporal ensembling"><source src="/static/videos/flash-aloha/smoothing-te.mp4" type="video/mp4"></video>
+        <div class="cad-viewer" data-model="/static/models/scissor-handles.glb?v=3" data-placeholder="handles" data-mirror data-view="0.9,1.1,-1.2">
+          <div class="cad-canvas" role="img" aria-label="Interactive 3D close-up of the scissor handles. Drag to rotate."></div>
+          <p class="cad-hint">Right-hand scissor handles · drag to rotate</p>
         </div>
       </div>
     </section>
 
-    <section class="feature" aria-labelledby="extra-smoothing-title">
-      <h2 id="extra-smoothing-title">Extra Smoothing Methods</h2>
-      <p class="caption">Caption coming soon.</p><!-- TODO: caption -->
+    <section class="feature" aria-labelledby="catching-title">
+      <h2 id="catching-title">Practicing Catching <span aria-hidden="true">🧤</span></h2>
       <div class="media">
-        <video muted loop playsinline controls preload="metadata" aria-label="Extra smoothing methods"><source src="/static/videos/flash-aloha/extra-smoothing.mp4" type="video/mp4"></video>
-      </div>
-    </section>
-
-    <section class="feature" aria-labelledby="finetuning-title">
-      <h2 id="finetuning-title">Finetuning Large Models</h2>
-      <p class="caption">Caption coming soon.</p><!-- TODO: caption -->
-      <div class="media">
-        <video muted loop playsinline controls preload="metadata" aria-label="Finetuning large models"><source src="/static/videos/flash-aloha/finetuning.mp4" type="video/mp4"></video>
-      </div>
-    </section>
-
-    <section class="feature" aria-labelledby="wild-title">
-      <h2 id="wild-title">In the wild</h2>
-      <p class="caption">Caption coming soon.</p><!-- TODO: caption -->
-      <div class="media">
-        <video muted loop playsinline controls preload="metadata" aria-label="Flash ALOHA in the wild"><source src="/static/videos/flash-aloha/in-the-wild.mp4" type="video/mp4"></video>
-      </div>
-    </section>
-
-    <section class="demonstrations" aria-labelledby="demonstrations-title">
-      <h2 id="demonstrations-title">See it in action</h2>
-      <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Manipulation demonstrations">
-        <div class="carousel-track" tabindex="0" aria-label="Video slides. Use the left and right arrow keys to browse.">
-          <figure class="slide" role="group" aria-roledescription="slide" aria-label="1 of 5: Fold shorts">
-            <video muted loop playsinline controls controlslist="noplaybackrate" preload="none" poster="/static/images/flash-aloha/shorts.jpg?v=2" aria-label="Fold shorts demonstration"><source src="/static/videos/flash-aloha/shorts.mp4?v=2" type="video/mp4"></video>
-            <figcaption>Fold shorts</figcaption>
-          </figure>
-          <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 of 5: Unstack cups">
-            <video muted loop playsinline controls controlslist="noplaybackrate" preload="none" poster="/static/images/flash-aloha/cups.jpg?v=2" aria-label="Unstack cups demonstration"><source src="/static/videos/flash-aloha/cups.mp4?v=2" type="video/mp4"></video>
-            <figcaption>Unstack cups</figcaption>
-          </figure>
-          <figure class="slide" role="group" aria-roledescription="slide" aria-label="3 of 5: Insert battery">
-            <video muted loop playsinline controls controlslist="noplaybackrate" preload="none" poster="/static/images/flash-aloha/battery.jpg?v=2" aria-label="Insert battery demonstration"><source src="/static/videos/flash-aloha/battery.mp4?v=2" type="video/mp4"></video>
-            <figcaption>Insert battery</figcaption>
-          </figure>
-          <figure class="slide" role="group" aria-roledescription="slide" aria-label="4 of 5: Bus table">
-            <video muted loop playsinline controls controlslist="noplaybackrate" preload="none" poster="/static/images/flash-aloha/table.jpg?v=2" aria-label="Bus table demonstration"><source src="/static/videos/flash-aloha/table.mp4?v=2" type="video/mp4"></video>
-            <figcaption>Bus table</figcaption>
-          </figure>
-          <figure class="slide" role="group" aria-roledescription="slide" aria-label="5 of 5: Fold shirt">
-            <video muted loop playsinline controls controlslist="noplaybackrate" preload="none" poster="/static/images/flash-aloha/shirt.jpg?v=2" aria-label="Fold shirt demonstration"><source src="/static/videos/flash-aloha/shirt.mp4?v=2" type="video/mp4"></video>
-            <figcaption>Fold shirt</figcaption>
-          </figure>
-        </div>
-        <div class="carousel-controls" hidden>
-          <button class="arrow previous" type="button" aria-label="Previous video"><span aria-hidden="true">&#8592;</span></button>
-          <div class="dots" aria-label="Choose a demonstration">
-            <button type="button" aria-label="Show fold shorts" aria-current="true"></button>
-            <button type="button" aria-label="Show unstack cups" aria-current="false"></button>
-            <button type="button" aria-label="Show insert battery" aria-current="false"></button>
-            <button type="button" aria-label="Show bus table" aria-current="false"></button>
-            <button type="button" aria-label="Show fold shirt" aria-current="false"></button>
-          </div>
-          <button class="arrow next" type="button" aria-label="Next video"><span aria-hidden="true">&#8594;</span></button>
-        </div>
-        <p class="slide-status" aria-live="polite" aria-atomic="true">1 / 5 &mdash; Fold shorts</p>
+        <video autoplay muted loop playsinline controls preload="metadata" poster="/static/images/flash-aloha/catching.jpg" aria-label="Practicing catching"><source src="/static/videos/flash-aloha/catching.mp4" type="video/mp4"></video>
       </div>
     </section>
 
