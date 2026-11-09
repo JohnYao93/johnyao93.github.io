@@ -206,6 +206,39 @@ function setupViewer(viewer) {
     },
   );
 
+  // Highlight tabs: data-highlight lists node-name prefixes ("lead,strap"); empty shows the whole model.
+  // Matching parts turn the accent color (the dark strap keeps its own), everything else fades to a ghost.
+  const highlightButtons = [...viewer.querySelectorAll('.cad-highlight button')];
+  // Derived from each part's own material so settings like double-sided rendering (needed for the
+  // mirrored model) carry over.
+  function variants(object) {
+    if (!object.userData.material) {
+      const original = object.material;
+      const accent = original.clone();
+      accent.color = new THREE.Color(0x1772d0);
+      const ghost = original.clone();
+      Object.assign(ghost, { transparent: true, opacity: 0.14, depthWrite: false });
+      object.userData.material = { original, accent, ghost };
+    }
+    return object.userData.material;
+  }
+  function highlight(spec) {
+    const prefixes = spec ? spec.split(',') : [];
+    scene.traverse((object) => {
+      if (!object.isMesh || object.userData.decoration) return;
+      const m = variants(object);
+      const name = object.name || object.parent?.name || '';
+      const hit = prefixes.some((p) => name.startsWith(p));
+      if (!prefixes.length) object.material = m.original;
+      else if (hit) object.material = name.startsWith('strap') ? m.original : m.accent;
+      else object.material = m.ghost;
+      object.renderOrder = hit ? 0 : 1; // draw ghosts after the solid parts
+    });
+    highlightButtons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.highlight || '') === (spec || ''))));
+    needsRender = true;
+  }
+  highlightButtons.forEach((b) => b.addEventListener('click', () => highlight(b.dataset.highlight)));
+
   buttons.forEach((b) => b.addEventListener('click', () => flyTo(b.dataset.view)));
   controls.addEventListener('change', () => { needsRender = true; });
   new ResizeObserver(() => {

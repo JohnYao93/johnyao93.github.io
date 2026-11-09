@@ -17,7 +17,7 @@
     }
   </script>
   <script src="../sections.js?v=6" defer></script>
-  <script src="../cad.js?v=10" type="module"></script>
+  <script src="../cad.js?v=11" type="module"></script>
 </head>
 <body>
   <header class="paper-header">
@@ -181,7 +181,12 @@
           <div class="cad-canvas" role="img" aria-label="Interactive 3D model of the Flash ALOHA platform. Drag to rotate."></div>
           <p class="cad-hint">Drag to rotate</p>
         </div>
-        <div class="cad-viewer" data-model="/static/models/scissor-handles.glb?v=3" data-placeholder="handles" data-mirror data-view="0.9,1.1,-1.2">
+        <div class="cad-viewer" data-model="/static/models/scissor-handles.glb?v=4" data-placeholder="handles" data-mirror data-view="0.9,1.1,-1.2">
+          <div class="segmented cad-layers cad-highlight" role="group" aria-label="Highlight parts">
+            <button type="button" data-highlight="" aria-pressed="true">Overall</button>
+            <button type="button" data-highlight="lead,strap" aria-pressed="false">Leads</button>
+            <button type="button" data-highlight="finger,adapter" aria-pressed="false">Fingers</button>
+          </div>
           <div class="cad-canvas" role="img" aria-label="Interactive 3D close-up of the scissor handles. Drag to rotate."></div>
           <p class="cad-hint">Right-hand scissor handles · drag to rotate</p>
         </div>
