@@ -37,6 +37,7 @@ h1 {
 .resource-link[aria-disabled="true"] { cursor: default; text-decoration: none; }
 .coming-soon { color: #6b6b6b; font-size: 0.8em; }
 .venue { padding-left: 22px; border-left: 1px solid #d9d9d9; }
+.presented-as { margin: 18px 0 0; font-size: 16px; color: #6b6b6b; }
 .hero { width: min(600px, calc(100% - 48px)); margin: 0 auto; }
 .submission-video { margin-bottom: 64px; }
 video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #111; }
@@ -297,4 +298,6 @@ figcaption { text-align: center; margin-top: 16px; font-size: 19px; }
 .affiliation-logo { display: block; width: min(380px, 80%); height: auto; margin: 18px auto 22px; }
 .clip-switch { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .clip-switch .media { width: 100%; }
+.compare-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; align-items: start; }
+@media (max-width: 700px) { .compare-pair { grid-template-columns: 1fr; } }
 .feature h2 + .setup-grid { margin-top: 26px; }
